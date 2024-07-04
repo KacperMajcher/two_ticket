@@ -1,78 +1,69 @@
-import 'dart:developer';
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:two_ticket/core/constants/constants.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:two_ticket/core/constants/enums.dart';
-import 'package:two_ticket/features/auth/data/domain/model/login_model.dart';
+import 'package:two_ticket/features/auth/data/domain/model/user_model.dart';
+import 'package:two_ticket/features/auth/data/domain/usecases/get_cached_user_usecase.dart';
+import 'package:two_ticket/features/auth/data/domain/usecases/login_usecase.dart';
+import 'package:two_ticket/features/auth/data/domain/usecases/logout_usecase.dart';
 
+part 'login_cubit.freezed.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit()
-      : super(
+  final LoginUseCase loginUseCase;
+  final LogoutUseCase logoutUseCase;
+  final GetCachedUserUseCase getCachedUserUseCase;
+
+  LoginCubit(
+    this.loginUseCase,
+    this.logoutUseCase,
+    this.getCachedUserUseCase,
+  ) : super(
           LoginState(
             status: LoginStatus.initial,
-            cookie: '',
+            user: null,
             error: '',
           ),
         );
 
-  Future<void> login(LoginModel loginModel) async {
+  void login(String username, String password) async {
     emit(
       LoginState(
         status: LoginStatus.connecting,
-        cookie: '',
+        user: null,
         error: '',
       ),
     );
 
-    const url = apiBaseURL + endpointLogin;
-
-    final Map<String, dynamic> data = loginModel.toJson();
-
     try {
-      final response = await Dio().post(
-        url,
-        data: data,
+      final user = await loginUseCase(username, password);
+      emit(
+        LoginState(
+          status: LoginStatus.success,
+          user: user,
+          error: '',
+        ),
       );
+    } catch (e) {
+      emit(
+        LoginState(
+          status: LoginStatus.error,
+          user: null,
+          error: 'Login failed: $e',
+        ),
+      );
+    }
+  }
 
-      log('Response status: ${response.statusCode}');
-      log('Response headers: ${response.headers}');
-
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        List<String>? cookies = response.headers['set-cookie'];
-        String? cookie = cookies?.first;
-
-        if (cookie != null) {
-          await secureStorage.write(key: 'cookie', value: cookie);
-          await secureStorage.write(
-              key: 'username', value: loginModel.username);
-
-          emit(
-            LoginState(
-              status: LoginStatus.success,
-              cookie: cookie,
-              error: '',
-            ),
-          );
-          log('cookie: $cookie');
-        } else {
-          String errorMessage =
-              'Login successful but cookie not found in response';
-          emit(
-            LoginState(
-              status: LoginStatus.success,
-              cookie: '',
-              error: errorMessage,
-            ),
-          );
-        }
-      } else {
+  Future<void> loadUser() async {
+    try {
+      final user = await getCachedUserUseCase();
+      if (user != null) {
         emit(
           LoginState(
-            status: LoginStatus.error,
-            cookie: '',
-            error: 'Login failed. Status code: ${response.statusCode}',
+            status: LoginStatus.success,
+            user: user,
+            error: '',
           ),
         );
       }
@@ -80,32 +71,19 @@ class LoginCubit extends Cubit<LoginState> {
       emit(
         LoginState(
           status: LoginStatus.error,
-          cookie: '',
-          error: 'Request failed: $e',
+          user: null,
+          error: 'Failed to load cached user: $e',
         ),
       );
     }
   }
 
-  Future<void> loadCookie() async {
-    String? cookie = await secureStorage.read(key: 'cookie');
-    if (cookie != null) {
-      emit(
-        LoginState(
-          status: LoginStatus.success,
-          cookie: cookie,
-          error: '',
-        ),
-      );
-    }
-  }
-
-  Future<void> clearCookie() async {
-    await secureStorage.delete(key: 'cookie');
+  Future<void> logout() async {
+    await logoutUseCase();
     emit(
       LoginState(
         status: LoginStatus.initial,
-        cookie: '',
+        user: null,
         error: '',
       ),
     );
