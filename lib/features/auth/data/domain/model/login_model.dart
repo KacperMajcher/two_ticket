@@ -1,14 +1,15 @@
-class LoginModel {
-  LoginModel({
-    required this.username,
-    required this.password,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String username;
-  final String password;
+part 'login_model.freezed.dart';
+part 'login_model.g.dart';
 
-  Map<String, dynamic> toJson() => {
-        "username": username,
-        "password": password,
-      };
+@freezed
+class LoginModel with _$LoginModel {
+  factory LoginModel({
+    required String username,
+    required String password,
+  }) = _LoginModel;
+
+  factory LoginModel.fromJson(Map<String, dynamic> json) =>
+      _$LoginModelFromJson(json);
 }
