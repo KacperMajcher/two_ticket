@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:two_ticket/core/constants/enums.dart';
-import 'package:two_ticket/features/auth/data/domain/model/user_model.dart';
 import 'package:two_ticket/features/auth/data/domain/usecases/get_cached_user_usecase.dart';
-import 'package:two_ticket/features/auth/data/domain/usecases/get_user_data_usecase.dart';
+import 'package:two_ticket/features/home/data/domain/usecases/get_user_data_usecase.dart';
 import 'package:two_ticket/features/auth/data/domain/usecases/login_usecase.dart';
 import 'package:two_ticket/features/auth/data/domain/usecases/logout_usecase.dart';
+import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
 
 part 'login_cubit.freezed.dart';
 part 'login_state.dart';

@@ -1,11 +1,13 @@
-import 'package:two_ticket/features/auth/data/datasources/auth_local_data_source.dart';
+import 'dart:developer';
+
+import 'package:two_ticket/features/home/data/datasources/local_data_source.dart';
 import 'package:two_ticket/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:two_ticket/features/auth/data/domain/model/login_model.dart';
-import 'package:two_ticket/features/auth/data/domain/model/user_model.dart';
+import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
 
 class AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
-  final AuthLocalDataSource localDataSource;
+  final LocalDataSource localDataSource;
 
   AuthRepository({
     required this.remoteDataSource,
@@ -38,7 +40,7 @@ class AuthRepository {
           final userDataResponse = await remoteDataSource.getUserData(
             cookie,
           );
-
+          log(userDataResponse.data.toString());
           return User(
             username: username,
             cookie: cookie,
@@ -73,14 +75,5 @@ class AuthRepository {
     }
 
     return null;
-  }
-
-  Future<User> getUserData(String cookie) async {
-    final response = await remoteDataSource.getUserData(
-      cookie,
-    );
-    return User.fromJson(
-      response.data,
-    );
   }
 }
