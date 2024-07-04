@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_ticket/core/constants/constants.dart';
 import 'package:two_ticket/core/constants/enums.dart';
+import 'package:two_ticket/features/auth/data/domain/model/login_model.dart';
 
 part 'login_state.dart';
 
@@ -16,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
           ),
         );
 
-  void login(String username, String password) async {
+  Future<void> login(LoginModel loginModel) async {
     emit(
       LoginState(
         status: LoginStatus.connecting,
@@ -27,10 +28,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     const url = apiBaseURL + endpointLogin;
 
-    final Map<String, dynamic> data = {
-      "username": username,
-      "password": password,
-    };
+    final Map<String, dynamic> data = loginModel.toJson();
 
     try {
       final response = await Dio().post(
@@ -47,7 +45,8 @@ class LoginCubit extends Cubit<LoginState> {
 
         if (cookie != null) {
           await secureStorage.write(key: 'cookie', value: cookie);
-          await secureStorage.write(key: 'username', value: username);
+          await secureStorage.write(
+              key: 'username', value: loginModel.username);
 
           emit(
             LoginState(

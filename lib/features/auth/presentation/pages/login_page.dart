@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_print
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_ticket/core/constants/constants.dart';
 import 'package:two_ticket/core/constants/enums.dart';
+import 'package:two_ticket/features/auth/data/domain/model/login_model.dart';
 import 'package:two_ticket/features/auth/presentation/pages/cubit/login_cubit.dart';
 import 'package:two_ticket/features/auth/presentation/widgets/login_button.dart';
 import 'package:two_ticket/features/auth/presentation/widgets/login_input_field.dart';
@@ -54,7 +55,7 @@ class LoginPage extends StatelessWidget {
                           content: Text(state.error),
                         ),
                       );
-                      print(state.error);
+                      log(state.error);
                     }
                   },
                   builder: (context, state) {
@@ -63,10 +64,11 @@ class LoginPage extends StatelessWidget {
                     } else {
                       return LoginButton(
                         onPressed: () {
-                          context.read<LoginCubit>().login(
-                                loginController.text,
-                                passwordController.text,
-                              );
+                          final loginModel = LoginModel(
+                            username: loginController.text,
+                            password: passwordController.text,
+                          );
+                          context.read<LoginCubit>().login(loginModel);
                         },
                       );
                     }
