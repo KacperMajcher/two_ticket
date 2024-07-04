@@ -44,3 +44,9 @@ app.*.map.json
 
 # API data
 constants.dart
+
+# Generated files
+*.config.dart
+*.freezed.dart
+*.g.dart
+
