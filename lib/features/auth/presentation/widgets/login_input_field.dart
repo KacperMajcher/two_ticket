@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class LoginInputField extends StatelessWidget {
   const LoginInputField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.obscureText,
     required this.hintText,
-  }) : super(key: key);
+  });
 
   final TextEditingController controller;
   final bool obscureText;
