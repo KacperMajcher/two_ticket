@@ -13,11 +13,20 @@ dependencies:
   dio: ^5.4.2+1
   injectable: ^2.3.5
   flutter_secure_storage: ^9.2.2
+  freezed_annotation: ^2.4.2
+  json_annotation: ^4.8.1
+  retrofit: ^4.0.1
+  get_it: ^7.6.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  build_runner: ^2.4.9
+  json_serializable: ^6.7.1
+  freezed: ^2.5.2
+  retrofit_generator: ^7.0.8
+  injectable_generator: ^2.1.4
 
 flutter:
   uses-material-design: true
