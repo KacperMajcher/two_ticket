@@ -11,7 +11,7 @@ abstract class AuthRemoteDataSource {
   @factoryMethod
   factory AuthRemoteDataSource(
     Dio dio, {
-    String baseUrl,
+    @Named('baseUrl') String baseUrl,
   }) = _AuthRemoteDataSource;
 
   @POST(endpointLogin)

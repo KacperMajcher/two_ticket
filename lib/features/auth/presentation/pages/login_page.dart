@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_ticket/core/constants/constants.dart';
+import 'package:two_ticket/core/constants/dependencies/injection_container.dart';
 import 'package:two_ticket/core/constants/enums.dart';
 import 'package:two_ticket/features/auth/data/domain/model/login_model.dart';
 import 'package:two_ticket/features/auth/presentation/pages/cubit/login_cubit.dart';
@@ -20,7 +21,7 @@ class LoginPage extends StatelessWidget {
     final passwordController = TextEditingController(text: password);
 
     return BlocProvider(
-      create: (context) => LoginCubit(),
+      create: (context) => getIt<LoginCubit>(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Login Page'),
@@ -68,7 +69,9 @@ class LoginPage extends StatelessWidget {
                             username: loginController.text,
                             password: passwordController.text,
                           );
-                          context.read<LoginCubit>().login(loginModel);
+                          context
+                              .read<LoginCubit>()
+                              .login(loginModel.username, loginModel.password);
                         },
                       );
                     }
