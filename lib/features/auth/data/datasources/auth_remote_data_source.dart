@@ -18,4 +18,9 @@ abstract class AuthRemoteDataSource {
   Future<HttpResponse> login(
     @Body() Map<String, dynamic> body,
   );
+
+  @GET(endpointUserMemberData)
+  Future<HttpResponse> getUserData(
+    @Header('Cookie') String cookie,
+  );
 }

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({
+    super.key,
+    this.userData,
+  });
+
+  final Map<String, dynamic>? userData;
 
   @override
   Widget build(BuildContext context) {
@@ -9,9 +14,18 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home page'),
       ),
-      body: const Center(
-        child: Text(
-          'Welcome to the application, you have logged in',
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Welcome to the application, you have logged in.',
+            ),
+            if (userData != null)
+              Text(
+                'User Data: ${userData.toString()}',
+              ),
+          ],
         ),
       ),
     );

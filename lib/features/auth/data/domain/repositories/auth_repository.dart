@@ -35,9 +35,14 @@ class AuthRepository {
           await localDataSource.saveCookie(cookie);
           await localDataSource.saveUsername(username);
 
+          final userDataResponse = await remoteDataSource.getUserData(
+            cookie,
+          );
+
           return User(
             username: username,
             cookie: cookie,
+            userData: userDataResponse.data,
           );
         } else {
           throw Exception('Login successful but cookie not found in response');
@@ -68,5 +73,14 @@ class AuthRepository {
     }
 
     return null;
+  }
+
+  Future<User> getUserData(String cookie) async {
+    final response = await remoteDataSource.getUserData(
+      cookie,
+    );
+    return User.fromJson(
+      response.data,
+    );
   }
 }
