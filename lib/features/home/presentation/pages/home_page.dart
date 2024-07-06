@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:two_ticket/features/home/data/domain/model/member_dto.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
     super.key,
-    this.userData,
+    this.member,
   });
 
-  final Map<String, dynamic>? userData;
+  final MemberDTO? member;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +22,9 @@ class HomePage extends StatelessWidget {
             const Text(
               'Welcome to the application, you have logged in.',
             ),
-            if (userData != null)
+            if (member != null)
               Text(
-                'User Data: ${userData.toString()}',
+                'User Data: ${member.toString()}',
               ),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:two_ticket/features/home/data/domain/model/member_dto.dart';
 import 'package:two_ticket/core/constants/constants.dart';
 
 part 'user_remote_data_source.g.dart';
@@ -15,7 +16,7 @@ abstract class UserRemoteDataSource {
   }) = _UserRemoteDataSource;
 
   @GET(endpointUserMemberData)
-  Future<HttpResponse> getUserData(
+  Future<HttpResponse<MemberDTO>> getUserData(
     @Header('Cookie') String cookie,
   );
 }

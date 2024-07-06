@@ -1,18 +1,22 @@
-import 'dart:developer';
-
-import 'package:two_ticket/features/home/data/datasources/local_data_source.dart';
 import 'package:two_ticket/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:two_ticket/features/auth/data/domain/model/login_model.dart';
+import 'package:two_ticket/features/home/data/datasources/local_data_source.dart';
 import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
+import 'package:two_ticket/features/home/data/domain/usecases/get_user_data_usecase.dart';
+import 'package:two_ticket/features/home/data/repositories/user_repository.dart';
 
 class AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
-  final LocalDataSource localDataSource;
-
-  AuthRepository({
+  AuthRepository(
+    this.getUserDataUseCase, {
     required this.remoteDataSource,
     required this.localDataSource,
+    required this.userRepository,
   });
+
+  final AuthRemoteDataSource remoteDataSource;
+  final LocalDataSource localDataSource;
+  final UserRepository userRepository;
+  final GetUserDataUseCase getUserDataUseCase;
 
   Future<User> login(
     String username,
@@ -37,14 +41,8 @@ class AuthRepository {
           await localDataSource.saveCookie(cookie);
           await localDataSource.saveUsername(username);
 
-          final userDataResponse = await remoteDataSource.getUserData(
+          return await getUserDataUseCase(
             cookie,
-          );
-          log(userDataResponse.data.toString());
-          return User(
-            username: username,
-            cookie: cookie,
-            userData: userDataResponse.data,
           );
         } else {
           throw Exception('Login successful but cookie not found in response');

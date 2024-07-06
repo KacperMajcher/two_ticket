@@ -21,28 +21,25 @@ class HomeCubit extends Cubit<HomeState> {
   final GetUserDataUseCase getUserDataUseCase;
 
   Future<void> fetchUserData() async {
-    final user = state.user;
-    if (user != null) {
-      try {
-        final updatedUser = await getUserDataUseCase(
-          user.cookie,
-        );
-        emit(
-          HomeState(
-            status: Status.success,
-            user: updatedUser,
-            error: '',
-          ),
-        );
-      } catch (e) {
-        emit(
-          HomeState(
-            status: Status.error,
-            user: null,
-            error: 'Failed to fetch user data: $e',
-          ),
-        );
-      }
+    try {
+      final updatedUser = await getUserDataUseCase(
+        state.user?.cookie ?? '',
+      );
+      emit(
+        HomeState(
+          status: Status.success,
+          user: updatedUser,
+          error: '',
+        ),
+      );
+    } catch (e) {
+      emit(
+        HomeState(
+          status: Status.error,
+          user: null,
+          error: 'Failed to fetch user data: $e',
+        ),
+      );
     }
   }
 }
