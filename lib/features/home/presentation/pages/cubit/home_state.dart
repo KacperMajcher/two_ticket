@@ -6,6 +6,7 @@ class HomeState with _$HomeState {
     required Status status,
     User? user,
     required List<QuotaDTO> quotas,
+    required List<PaymentMapDTO> paymentMaps,
     required String error,
   }) = _HomeState;
 }

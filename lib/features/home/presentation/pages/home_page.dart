@@ -50,6 +50,21 @@ class HomePage extends StatelessWidget {
                               },
                             ),
                           ),
+                          Container(
+                            height: 200,
+                            color: Colors.greenAccent,
+                            child: ListView.builder(
+                              itemCount: state.paymentMaps.length,
+                              itemBuilder: (context, index) {
+                                final paymentMap = state.paymentMaps[index];
+                                return ListTile(
+                                  title: Text(paymentMap.periodicity),
+                                  subtitle: Text(paymentMap.price.toString()),
+                                  onTap: () {},
+                                );
+                              },
+                            ),
+                          ),
                         ],
                       ),
           ),

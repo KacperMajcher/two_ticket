@@ -5,8 +5,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:two_ticket/core/constants/enums.dart';
 import 'package:two_ticket/features/home/data/domain/model/quota_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
+import 'package:two_ticket/features/home/data/domain/model/payment_map_dto.dart';
 import 'package:two_ticket/features/home/data/domain/usecases/get_quota_usecase.dart';
 import 'package:two_ticket/features/home/data/domain/usecases/get_user_data_usecase.dart';
+import 'package:two_ticket/features/home/data/domain/usecases/get_payment_maps_usecase.dart';
 
 part 'home_cubit.freezed.dart';
 part 'home_state.dart';
@@ -15,17 +17,20 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit(
     this.getUserDataUseCase,
     this.getQuotasUseCase,
+    this.getPaymentMapsUseCase,
   ) : super(
           HomeState(
             status: Status.initial,
             user: null,
             quotas: [],
+            paymentMaps: [],
             error: '',
           ),
         );
 
   final GetUserDataUseCase getUserDataUseCase;
   final GetQuotasUseCase getQuotasUseCase;
+  final GetPaymentMapsUseCase getPaymentMapsUseCase;
 
   Future<void> init() async {
     try {
@@ -41,12 +46,18 @@ class HomeCubit extends Cubit<HomeState> {
       final quotas = await getQuotasUseCase(
         updatedUser.cookie,
       );
+      log('Quotas fetched successfully: $quotas');
+      final paymentMaps = await getPaymentMapsUseCase(
+        updatedUser.cookie,
+      );
+      log('Payment maps fetched successfully: $paymentMaps');
 
       emit(
         HomeState(
           status: Status.success,
           user: updatedUser,
           quotas: quotas,
+          paymentMaps: paymentMaps,
           error: '',
         ),
       );
@@ -57,6 +68,7 @@ class HomeCubit extends Cubit<HomeState> {
           status: Status.error,
           user: null,
           quotas: [],
+          paymentMaps: [],
           error: 'Failed to fetch data: $e',
         ),
       );
