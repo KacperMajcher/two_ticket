@@ -1,7 +1,7 @@
 import 'dart:developer';
-
 import 'package:two_ticket/features/home/data/datasources/local_data_source.dart';
 import 'package:two_ticket/features/home/data/datasources/user_remote_data_source.dart';
+import 'package:two_ticket/features/home/data/domain/model/quota_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
 
 class UserRepository {
@@ -13,23 +13,33 @@ class UserRepository {
     required this.localDataSource,
   });
 
-  Future<User> getUserData(
-    String cookie,
-  ) async {
-    final response = await remoteDataSource.getUserData(
-      cookie,
-    );
+  Future<User> getUserData() async {
+    final cookie = await localDataSource.getCookie();
+    try {
+      final response = await remoteDataSource.getUserData(cookie!);
+      log('fetchUserData: ${response.data}');
+      final memberDTO = response.data;
+      final user = User.fromMemberDTO(
+        cookie,
+        memberDTO,
+      );
+      log('User created: $user');
+      return user;
+    } catch (e) {
+      log('Error fetching user data: $e');
+      rethrow;
+    }
+  }
 
-    log('fetchUserData: ${response.data}');
-
-    final memberDTO = response.data;
-
-    final user = User(
-      username: memberDTO.name,
-      cookie: cookie,
-      member: memberDTO,
-    );
-
-    return user;
+  Future<List<QuotaDTO>> getQuotas(String cookie) async {
+    try {
+      log('Fetching quotas with cookie: $cookie');
+      final response = await remoteDataSource.getQuotas(cookie);
+      log('fetchQuotas: ${response.data}');
+      return response.data;
+    } catch (e) {
+      log('Error fetching quotas: $e');
+      rethrow;
+    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
 
 part 'member_dto.freezed.dart';
 part 'member_dto.g.dart';
@@ -37,4 +38,13 @@ class MemberDTO with _$MemberDTO {
 
   factory MemberDTO.fromJson(Map<String, dynamic> json) =>
       _$MemberDTOFromJson(json);
+}
+
+extension MemberDTOExtension on MemberDTO {
+  User toUser(String cookie) {
+    return User(
+      cookie: cookie,
+      member: this,
+    );
+  }
 }

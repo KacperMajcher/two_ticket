@@ -41,9 +41,9 @@ class AuthRepository {
           await localDataSource.saveCookie(cookie);
           await localDataSource.saveUsername(username);
 
-          return await getUserDataUseCase(
-            cookie,
-          );
+          final user = await getUserDataUseCase();
+
+          return user;
         } else {
           throw Exception('Login successful but cookie not found in response');
         }
@@ -66,10 +66,13 @@ class AuthRepository {
     final username = await localDataSource.getUsername();
 
     if (cookie != null && username != null) {
-      return User(
-        username: username,
-        cookie: cookie,
-      );
+      try {
+        final user = await getUserDataUseCase();
+        return user;
+      } catch (e) {
+        throw Exception(
+            'Failed to fetch user data with cached credentials: $e');
+      }
     }
 
     return null;

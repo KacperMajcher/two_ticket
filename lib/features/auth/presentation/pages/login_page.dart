@@ -47,9 +47,7 @@ class LoginPage extends StatelessWidget {
                     if (state.status == LoginStatus.success) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => HomePage(
-                            member  : state.user?.member,
-                          ),
+                          builder: (_) => const HomePage(),
                         ),
                       );
                     } else if (state.status == LoginStatus.error) {
