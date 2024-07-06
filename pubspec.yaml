@@ -30,3 +30,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/mbway.png
+    - assets/images/multibanco.png
+    - assets/images/paypal.png
+    - assets/images/visa.png
