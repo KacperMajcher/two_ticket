@@ -1,6 +1,5 @@
 import 'package:two_ticket/features/home/data/datasources/local_data_source.dart';
 import 'package:two_ticket/features/home/data/datasources/user_remote_data_source.dart';
-import 'package:two_ticket/features/home/data/domain/model/payment_model.dart';
 import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
 
 class UserRepository {

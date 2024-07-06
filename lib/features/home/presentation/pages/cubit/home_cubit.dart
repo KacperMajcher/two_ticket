@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:two_ticket/core/constants/enums.dart';
-import 'package:two_ticket/features/auth/data/domain/usecases/get_user_data_usecase.dart';
-import 'package:two_ticket/features/auth/presentation/data/domain/model/user_model.dart';
+import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
+import 'package:two_ticket/features/home/data/domain/usecases/get_user_data_usecase.dart';
 
 part 'home_cubit.freezed.dart';
 part 'home_state.dart';
