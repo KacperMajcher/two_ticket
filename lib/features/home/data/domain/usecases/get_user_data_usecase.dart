@@ -8,7 +8,7 @@ class GetUserDataUseCase {
 
   final UserRepository repository;
 
-  Future<User> call(String cookie) {
-    return repository.getUserData(cookie);
+  Future<User> call() {
+    return repository.getUserData();
   }
 }

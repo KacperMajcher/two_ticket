@@ -85,7 +85,7 @@ class LoginCubit extends Cubit<LoginState> {
     final user = state.user;
     if (user != null) {
       try {
-        final updatedUser = await getUserDataUseCase(user.cookie);
+        final updatedUser = await getUserDataUseCase();
         emit(
           LoginState(
             status: LoginStatus.success,
