@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:two_ticket/core/constants/dependencies/injection_container.dart';
 import 'package:two_ticket/core/constants/enums.dart';
 import 'package:two_ticket/features/home/presentation/pages/cubit/home_cubit.dart';
+import 'package:two_ticket/features/home/presentation/pages/payment_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -59,8 +60,17 @@ class HomePage extends StatelessWidget {
                                 final paymentMap = state.paymentMaps[index];
                                 return ListTile(
                                   title: Text(paymentMap.periodicity),
-                                  subtitle: Text(paymentMap.price.toString()),
-                                  onTap: () {},
+                                  subtitle: Text('${paymentMap.price} €'),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => PaymentPage(
+                                          paymentMap: paymentMap,
+                                          user: state.user!,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),

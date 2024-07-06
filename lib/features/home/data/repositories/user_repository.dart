@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:two_ticket/features/home/data/datasources/local_data_source.dart';
 import 'package:two_ticket/features/home/data/datasources/user_remote_data_source.dart';
+import 'package:two_ticket/features/home/data/domain/model/ask_payment_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/quota_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
 import 'package:two_ticket/features/home/data/domain/model/payment_map_dto.dart';
@@ -55,6 +56,24 @@ class UserRepository {
       return response.data;
     } catch (e) {
       log('Error fetching payment maps: $e');
+      rethrow;
+    }
+  }
+
+  Future<AskPaymentDTO> askPayment(
+    String cookie,
+    AskPaymentDTO askPayment,
+  ) async {
+    try {
+      final response = await remoteDataSource.askPayment(
+        cookie,
+        'application/json',
+        askPayment,
+      );
+      log('askPayment response: ${response.data}');
+      return response.data;
+    } catch (e) {
+      log('Error asking for payment: $e');
       rethrow;
     }
   }

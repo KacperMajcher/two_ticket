@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:two_ticket/core/constants/constants.dart';
+import 'package:two_ticket/features/home/data/domain/model/ask_payment_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/member_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/payment_map_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/quota_dto.dart';
@@ -30,5 +31,12 @@ abstract class UserRemoteDataSource {
   @GET(endpointPaymentMaps)
   Future<HttpResponse<List<PaymentMapDTO>>> getPaymentMaps(
     @Header('Cookie') String cookie,
+  );
+
+  @POST(endpointAskPayment)
+  Future<HttpResponse<AskPaymentDTO>> askPayment(
+    @Header('Cookie') String cookie,
+    @Header('Content-Type') String contentType,
+    @Body() AskPaymentDTO askPaymentDTO,
   );
 }
