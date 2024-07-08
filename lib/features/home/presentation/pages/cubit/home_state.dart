@@ -7,6 +7,7 @@ class HomeState with _$HomeState {
     User? user,
     required List<QuotaDTO> quotas,
     required List<PaymentMapDTO> paymentMaps,
+    @Default(5) int itemsToShow,
     required String error,
   }) = _HomeState;
 }

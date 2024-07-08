@@ -1,18 +1,18 @@
 import 'dart:developer';
-import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:two_ticket/core/constants/dependencies/injection_container.dart';
 import 'package:two_ticket/core/constants/enums.dart';
 import 'package:two_ticket/features/home/data/datasources/local_data_source.dart';
+import 'package:two_ticket/features/home/data/domain/model/ask_payment_dto.dart';
+import 'package:two_ticket/features/home/data/domain/model/payment_map_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/quota_dto.dart';
 import 'package:two_ticket/features/home/data/domain/model/user_model.dart';
-import 'package:two_ticket/features/home/data/domain/model/payment_map_dto.dart';
-import 'package:two_ticket/features/home/data/domain/model/ask_payment_dto.dart';
+import 'package:two_ticket/features/home/data/domain/usecases/ask_payment_usecase.dart';
+import 'package:two_ticket/features/home/data/domain/usecases/get_payment_maps_usecase.dart';
 import 'package:two_ticket/features/home/data/domain/usecases/get_quota_usecase.dart';
 import 'package:two_ticket/features/home/data/domain/usecases/get_user_data_usecase.dart';
-import 'package:two_ticket/features/home/data/domain/usecases/get_payment_maps_usecase.dart';
-import 'package:two_ticket/features/home/data/domain/usecases/ask_payment_usecase.dart';
 
 part 'home_cubit.freezed.dart';
 part 'home_state.dart';
@@ -52,7 +52,6 @@ class HomeCubit extends Cubit<HomeState> {
       final quotas = await getQuotasUseCase(
         updatedUser.cookie,
       );
-      log('Quotas fetched successfully: $quotas');
       final paymentMaps = await getPaymentMapsUseCase(
         updatedUser.cookie,
       );
@@ -97,13 +96,20 @@ class HomeCubit extends Cubit<HomeState> {
         ),
       );
     } catch (e) {
-      log('Error requesting payment: $e');
       emit(
         state.copyWith(
           status: Status.error,
-          error: 'Failed to request payment: $e',
+          error: '$e',
         ),
       );
     }
+  }
+
+  Future<void> showMoreItems() async {
+    emit(
+      state.copyWith(
+        itemsToShow: state.itemsToShow + 5,
+      ),
+    );
   }
 }

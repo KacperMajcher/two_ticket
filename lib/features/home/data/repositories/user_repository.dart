@@ -25,7 +25,6 @@ class UserRepository {
         cookie,
         memberDTO,
       );
-      log('User created: $user');
       return user;
     } catch (e) {
       log('Error fetching user data: $e');
@@ -73,7 +72,6 @@ class UserRepository {
       log('askPayment response: ${response.data}');
       return response.data;
     } catch (e) {
-      log('Error asking for payment: $e');
       rethrow;
     }
   }
