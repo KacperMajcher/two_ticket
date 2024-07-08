@@ -72,7 +72,6 @@ class UserRepository {
       log('askPayment response: ${response.data}');
       return response.data;
     } catch (e) {
-      log('Error asking for payment: $e');
       rethrow;
     }
   }

@@ -49,8 +49,10 @@ class QuotasPage extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PaymentPage(),
+                                        builder: (context) => PaymentPage(
+                                          paymentMap: state.paymentMaps[0],
+                                          user: state.user!,
+                                        ),
                                       ),
                                     );
                                   },

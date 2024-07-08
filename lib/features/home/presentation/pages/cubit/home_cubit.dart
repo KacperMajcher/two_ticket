@@ -96,11 +96,10 @@ class HomeCubit extends Cubit<HomeState> {
         ),
       );
     } catch (e) {
-      log('Error requesting payment: $e');
       emit(
         state.copyWith(
           status: Status.error,
-          error: 'Failed to request payment: $e',
+          error: '$e',
         ),
       );
     }
