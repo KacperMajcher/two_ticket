@@ -10,12 +10,14 @@ import 'package:two_ticket/features/auth/presentation/pages/cubit/login_cubit.da
 import 'package:two_ticket/features/auth/presentation/widgets/login_button.dart';
 import 'package:two_ticket/features/auth/presentation/widgets/login_input_field.dart';
 import 'package:two_ticket/features/home/presentation/pages/home_page.dart';
+import 'package:two_ticket/features/home/presentation/pages/widgets/custom_app_bar.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
   @override
   Widget build(BuildContext context) {
     final double dw = MediaQuery.of(context).size.width;
+    final double dh = MediaQuery.of(context).size.height;
 
     final loginController = TextEditingController(text: username);
     final passwordController = TextEditingController(text: password);
@@ -23,62 +25,72 @@ class LoginPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<LoginCubit>(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login Page'),
-        ),
+        appBar: const CustomAppBar(),
         body: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: dw * .01),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                LoginInputField(
+          child: Column(
+            children: [
+              const Image(
+                image: AssetImage(
+                  'assets/banner.jpg',
+                ),
+              ),
+              SizedBox(height: dh * .2),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: dw * .05),
+                child: LoginInputField(
                   controller: loginController,
                   obscureText: false,
                   hintText: 'Login',
                 ),
-                LoginInputField(
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: dw * .05),
+                child: LoginInputField(
                   controller: passwordController,
                   obscureText: true,
                   hintText: 'Password',
                 ),
-                BlocConsumer<LoginCubit, LoginState>(
-                  listener: (context, state) {
-                    if (state.status == LoginStatus.success) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const HomePage(),
-                        ),
-                      );
-                    } else if (state.status == LoginStatus.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(state.error),
-                        ),
-                      );
-                      log(state.error);
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state.status == LoginStatus.connecting) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      return LoginButton(
-                        onPressed: () {
-                          final loginModel = LoginModel(
-                            username: loginController.text,
-                            password: passwordController.text,
-                          );
-                          context
-                              .read<LoginCubit>()
-                              .login(loginModel.username, loginModel.password);
-                        },
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
+              ),
+              SizedBox(height: dh * .05),
+              BlocConsumer<LoginCubit, LoginState>(
+                listener: (context, state) {
+                  if (state.status == LoginStatus.success) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const HomePage(),
+                      ),
+                    );
+                  } else if (state.status == LoginStatus.error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.error),
+                      ),
+                    );
+                    log(state.error);
+                  }
+                },
+                builder: (context, state) {
+                  if (state.status == LoginStatus.connecting) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    return LoginButton(
+                      color: Colors.blue,
+                      text: 'Login',
+                      onPressed: () {
+                        final loginModel = LoginModel(
+                          username: loginController.text,
+                          password: passwordController.text,
+                        );
+                        context.read<LoginCubit>().login(
+                              loginModel.username,
+                              loginModel.password,
+                            );
+                      },
+                    );
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),
