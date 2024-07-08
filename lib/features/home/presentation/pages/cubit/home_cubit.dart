@@ -52,7 +52,6 @@ class HomeCubit extends Cubit<HomeState> {
       final quotas = await getQuotasUseCase(
         updatedUser.cookie,
       );
-      log('Quotas fetched successfully: $quotas');
       final paymentMaps = await getPaymentMapsUseCase(
         updatedUser.cookie,
       );

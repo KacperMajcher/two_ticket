@@ -25,7 +25,6 @@ class UserRepository {
         cookie,
         memberDTO,
       );
-      log('User created: $user');
       return user;
     } catch (e) {
       log('Error fetching user data: $e');
