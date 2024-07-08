@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:two_ticket/features/utils/text_suffix.dart';
 
-class LoginInputField extends StatelessWidget {
+class LoginInputField extends StatefulWidget {
   const LoginInputField({
     super.key,
     required this.controller,
@@ -13,28 +14,51 @@ class LoginInputField extends StatelessWidget {
   final String hintText;
 
   @override
+  LoginInputFieldState createState() => LoginInputFieldState();
+}
+
+class LoginInputFieldState extends State<LoginInputField> {
+  bool _isFieldActive = false;
+
+  @override
   Widget build(BuildContext context) {
+    final double dh = MediaQuery.of(context).size.height;
+
     return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      textAlign: TextAlign.center,
+      controller: widget.controller,
+      obscureText: widget.obscureText,
       maxLines: 1,
-      style: const TextStyle(
-        fontWeight: FontWeight.w400,
-        fontSize: 14,
-        color: Color(0xff053630),
+      onChanged: (value) {
+        setState(() {
+          _isFieldActive = value.isNotEmpty;
+        });
+      },
+      style: suffix(
+        dh * .0175,
+        const Color(0xff053630),
+        FontWeight.w400,
       ),
       decoration: InputDecoration(
         disabledBorder: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        enabledBorder: InputBorder.none,
-        hintText: hintText,
-        hintStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          color: Color(0x4A191918),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.black,
+            width: 2,
+          ),
         ),
-        contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFDDD9D9),
+            width: 2,
+          ),
+        ),
+        labelText: _isFieldActive ? widget.hintText : null,
+        hintText: _isFieldActive ? null : widget.hintText,
+        hintStyle: suffix(
+          dh * .0175,
+          const Color(0x4A191918),
+          FontWeight.w400,
+        ),
       ),
     );
   }
