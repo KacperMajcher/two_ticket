@@ -1,28 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:two_ticket/features/utils/text_suffix.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({
     super.key,
-    required this.onPressed,
+    required this.color,
+    required this.text,
+    this.onPressed,
   });
 
-  final VoidCallback onPressed;
+  final Color color;
+  final String text;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
+    final double dw = MediaQuery.of(context).size.width;
+    final double dh = MediaQuery.of(context).size.height;
+
+    return OutlinedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          const Color(
-            0xFF46BBE2,
+        backgroundColor: MaterialStateProperty.all(color),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          EdgeInsets.symmetric(
+            vertical: dh * .01,
+            horizontal: dw * .39,
           ),
         ),
       ),
-      child: const Text(
-        'Login',
-        style: TextStyle(
-          color: Colors.black,
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: suffix(
+          dh * .0175,
+          Colors.white,
+          FontWeight.w600,
         ),
       ),
     );
